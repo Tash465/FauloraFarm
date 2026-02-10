@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmation - Faulora Farm{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    .thankyou-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 40px;
+        background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        position: relative;
+        animation: fadeInUp 1s ease-out;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .thankyou-container::before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        background: url('https://via.placeholder.com/100x100?text=Farm+Icon') no-repeat center;
+        background-size: cover;
+        border-radius: 50%;
+        border: 5px solid #4caf50;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+        color: #2e7d32;
+        margin-bottom: 10px;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        animation: bounceIn 1.2s ease-out;
+    }
+    @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.05); }
+        70% { transform: scale(0.9); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    p {
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: #388e3c;
+    }
+    .contact-info {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 5px solid #4caf50;
+    }
+    h3 {
+        color: #2e7d32;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+    }
+    table {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    th {
+        background: linear-gradient(90deg, #4caf50, #66bb6a);
+        color: white;
+        padding: 12px;
+        font-weight: bold;
+    }
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+    tr:hover {
+        background: #e8f5e8;
+        transition: background 0.3s ease;
+    }
+    .total {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2e7d32;
+        margin-bottom: 30px;
+        background: #c8e6c9;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .continue-btn {
+        display: inline-block;
+        text-decoration: none;
+        background: linear-gradient(45deg, #4caf50, #66bb6a);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+    .continue-btn:hover {
+        background: linear-gradient(45deg, #66bb6a, #81c784);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+    }
+    .footer {
+        margin-top: 40px;
+        font-size: 14px;
+        color: #666;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
+    .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: #e0e0e0;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #4caf50, #66bb6a);
+        width: 100%;
+        animation: progress 2s ease-out;
+    }
+    @keyframes progress {
+        from { width: 0%; }
+        to { width: 100%; }
+    }
+    @media (max-width: 768px) {
+        .thankyou-container {
+            margin: 20px;
+            padding: 20px;
+        }
+        h1 { font-size: 2em; }
+        table { font-size: 14px; }
+    }
+</style>
+
+<div class="thankyou-container">
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    <h1> Thank You for Your Order!</h1>
+    <p>Order #{{ order.id }} has been placed successfully. We're excited to deliver fresh goodness to you!</p>
+    
+    <div class="contact-info">
+        <p style="font-size:16px; margin-bottom:0;">
+            We'll contact you soon at <strong>{{ order.email }}</strong> 
+            or <strong>{{ order.phone }}</strong> for delivery details. 
+        </p>
+    </div>
+
+    <!-- Order Items Table -->
+    <h3>Order Summary:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>KSh {{ item.price }}</td>
+                <td>KSh {{ item.get_total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total Paid: KSh {{ order.total_price }}
+    </div>
+    
+    <a href="{% url 'products:product_list' %}" class="continue-btn">
+          Continue Shopping
+    </a>
+
+    <div class="footer">
+        <p>© 2026 Faulora Farm. All rights reserved. Fresh from the farm to your table! </p>
+    </div>
+</div>
+{% endblock %}

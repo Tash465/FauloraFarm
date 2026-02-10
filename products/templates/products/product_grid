@@ -1,0 +1,18 @@
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <!-- Clickable image and name goes to product detail -->
+        <a href="{% url 'product_detail' product.id %}">
+            <img src="{{ product.image.url }}" class="product-image" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+        </a>
+        <p>${{ product.price }}</p>
+
+        <!-- Direct Order Now button -->
+        <form method="post" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit" class="add-to-cart-btn">Order Now</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>

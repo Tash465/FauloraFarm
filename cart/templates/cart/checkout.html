@@ -1,0 +1,429 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - Faulora Farm{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Secure checkout at Faulora Farm: Fresh produce, easy delivery, and M-Pesa payment. Shop Kenyan organic goods!">
+<meta name="keywords" content="checkout, payment, M-Pesa, fresh produce, organic, Kenyan farm, Faulora Farm">
+<meta property="og:title" content="Checkout - Faulora Farm">
+<meta property="og:description" content="Complete your order with secure payment. Shop now!">
+<meta property="og:image" content="{% static 'images/farm-hero.jpg' %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+/* === Global Styles === */
+body {
+    background: linear-gradient(180deg, #f3fff3 0%, #e8f5e8 100%);
+    font-family: 'Poppins', sans-serif;
+    color: #2e7d32;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+.section-divider {
+    height: 50px;
+    background: linear-gradient(90deg, transparent, #c8e6c9, transparent);
+    margin: 40px 0;
+    position: relative;
+}
+.section-divider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><path d="M0 10 Q25 0 50 10 T100 10 V20 H0 Z" fill="%23c8e6c9"/></svg>');
+    background-size: 100px 20px;
+    background-repeat: repeat-x;
+}
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 1.2s ease-in;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hover-zoom {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-zoom:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+}
+
+/* Buttons */
+.btn {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+.btn:hover {
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+.btn:focus {
+    outline: 2px solid #4caf50;
+    outline-offset: 2px;
+}
+.btn-secondary {
+    background: linear-gradient(135deg, #888, #666);
+}
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #666, #444);
+}
+.btn-warning {
+    background: linear-gradient(135deg, #ff9800, #f57c00);
+    animation: pulse 2s infinite;
+}
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f57c00, #e65100);
+}
+@keyframes pulse {
+    0% { box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); }
+    50% { box-shadow: 0 8px 16px rgba(255, 152, 0, 0.5); }
+    100% { box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); }
+}
+
+/* Checkout Container */
+.checkout-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    background: linear-gradient(145deg, #ffffff, #f1f8e9);
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    border: 3px solid #c8e6c9;
+    position: relative;
+    overflow: hidden;
+}
+.checkout-header {
+    text-align: center;
+    color: #1b5e20;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Sections */
+.checkout-summary, .checkout-form, .checkout-payment {
+    background: linear-gradient(145deg, #ffffff, #f1f8e9);
+    border: 2px solid #c8e6c9;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.checkout-summary:hover, .checkout-form:hover, .checkout-payment:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+.checkout-summary h3, .checkout-form h3, .checkout-payment h3 {
+    margin-bottom: 20px;
+    color: #1b5e20;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.checkout-form h3::before { content: '\f0d1'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
+.checkout-payment h3::before { content: '\f3d1'; font-family: 'Font Awesome 6 Free'; font-weight: 900; }
+
+/* Order Summary Table */
+.checkout-summary table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.checkout-summary th, .checkout-summary td {
+    padding: 15px;
+    border-bottom: 1px solid #e0f2e0;
+    text-align: left;
+}
+.checkout-summary th {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    font-weight: 600;
+}
+.checkout-summary tr:hover td {
+    background: #f1f8e9;
+}
+.checkout-total {
+    text-align: right;
+    font-size: 1.8em;
+    color: #1b5e20;
+    margin-top: 20px;
+    font-weight: 700;
+    border-top: 2px solid #c8e6c9;
+    padding-top: 15px;
+}
+
+/* Product Thumbnail */
+.checkout-summary img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+.checkout-summary img:hover {
+    transform: scale(1.2);
+}
+
+/* Form Elements */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #c8e6c9;
+    border-radius: 10px;
+    font-size: 1em;
+    background: #fafafa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+input:focus, textarea:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 8px rgba(76,175,80,0.3);
+    outline: none;
+}
+.actions {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Payment Section */
+.checkout-payment p { font-size: 1.1em; margin: 10px 0; }
+.payments-list { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; }
+.payments-list h4 { color: #2e7d32; margin-bottom: 10px; }
+.payments-list ul { list-style: none; padding: 0; }
+.payments-list li { padding: 8px 0; border-bottom: 1px solid #ddd; }
+
+/* Modal for Payment Simulation */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; bottom: 0;
+    width: 100%; height: auto;
+    background: rgba(0,0,0,0.5);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: linear-gradient(145deg, #ffffff, #f1f8e9);
+    margin: auto;
+    padding: 30px;
+    border-radius: 20px 20px 0 0;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(46,125,50,0.2);
+    animation: slideIn 0.5s ease-out;
+}
+.modal-content p { font-size: 1.1em; margin: 15px 0; color: #2e7d32; }
+.modal-content .close {
+    background: #ffcb05;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+.modal-content .close:hover { background: #ffb300; }
+@keyframes slideIn { from { transform: translateY(50px); opacity:0 } to { transform: translateY(0); opacity:1 } }
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.empty-cart i { font-size: 4em; color: #4caf50; margin-bottom: 20px; }
+.empty-cart p { font-size: 1.3em; color: #2e7d32; margin-bottom: 30px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .checkout-container { margin: 20px; padding: 20px; }
+    .checkout-header { font-size: 2em; }
+    .checkout-summary th, .checkout-summary td { padding: 10px; font-size: 0.9em; }
+    .actions { flex-direction: column; align-items: center; }
+    .btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<main id="main-content">
+    <div class="section-divider"></div>
+
+    <div class="checkout-container fade-in">
+        <h2 class="checkout-header"><i class="fas fa-credit-card" aria-hidden="true"></i> Checkout - Faulora Farm</h2>
+
+        {% if cart_items %}
+        <div class="checkout-summary">
+            <h3>Order Summary</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>
+                            {% if item.product.image %}
+                           <img src="{{ item.product.image }}" alt="Image of {{ item.product.name }}" loading="lazy">
+                            {% else %}
+                            <img src="{% static 'images/default-product.jpg' %}" alt="No Image">
+                            {% endif %}
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>KSh {{ item.product.price|floatformat:2 }}</td>
+                        <td>KSh {{ item.subtotal|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="checkout-total">
+                <strong>Total: KSh {{ total_price|floatformat:2 }}</strong>
+            </div>
+        </div>
+
+        <div class="checkout-form">
+            <h3>Delivery Information</h3>
+            <form id="delivery-form" method="POST" autocomplete="on">
+                {% csrf_token %}
+                <input type="text" name="full_name" placeholder="Full Name" required autocomplete="name" value="{{ request.user.get_full_name }}">
+                <input type="email" name="email" placeholder="Email Address" required autocomplete="email" value="{{ request.user.email }}">
+                <input type="tel" name="phone" placeholder="Phone Number (07XXXXXXXX)" required pattern="0[0-9]{9}" autocomplete="tel" value="{{ request.user.profile.phone|default:'' }}">
+                <textarea name="address" rows="3" placeholder="Delivery Address" required autocomplete="street-address">{{ request.user.profile.address|default:'' }}</textarea>
+
+                <div class="actions">
+                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Cart
+                    </a>
+                    <button type="button" id="proceed-to-payment" class="btn">
+                        <i class="fas fa-check"></i> Proceed to Payment
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="checkout-payment" id="payment-section" style="display: none;">
+            <h3>Payment Method</h3>
+            <p>We accept M-Pesa for secure, fast payments. Your total is <strong>KSh {{ total_price|floatformat:2 }}</strong>.</p>
+            <div class="payments-list">
+                <h4>Why M-Pesa?</h4>
+                <ul>
+                    <li><i class="fas fa-mobile-alt"></i> Pay directly from your phone</li>
+                    <li><i class="fas fa-shield-alt"></i> Secure and trusted in Kenya</li>
+                    <li><i class="fas fa-clock"></i> Instant confirmation</li>
+                </ul>
+            </div>
+            <button id="pay-with-mpesa" class="btn btn-warning">
+                <i class="fas fa-mobile-alt"></i> Pay with M-Pesa
+            </button>
+        </div>
+
+        {% else %}
+        <div class="empty-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Your cart is empty </p>
+            <a href="{% url 'products:product_list' %}" class="btn">
+                <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal for Payment Simulation -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <h3><i class="fas fa-mobile-alt"></i> Pay with M-Pesa</h3>
+            <p>Payment Transaction of <strong>KSh {{ total_price|floatformat:2 }}</strong> to Faulora Farm.</p>
+            <p>Confirm Payment to Authorize Transaction Transfer and Secure Order.</p>
+            <button id="confirm-payment" class="btn">Confirm Payment</button>
+            <button class="close">Cancel</button>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const proceedBtn = document.getElementById('proceed-to-payment');
+    const paymentSection = document.getElementById('payment-section');
+    const payWithMpesaBtn = document.getElementById('pay-with-mpesa');
+    const paymentModal = document.getElementById('payment-modal');
+    const confirmPaymentBtn = document.getElementById('confirm-payment');
+    const deliveryForm = document.getElementById('delivery-form');
+    const closeModalBtn = document.querySelector('.close');
+
+    proceedBtn.addEventListener('click', function() {
+        if (deliveryForm.checkValidity()) {
+            paymentSection.style.display = 'block';
+            proceedBtn.style.display = 'none';
+            paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            alert('Please fill in all delivery details.');
+        }
+    });
+
+    payWithMpesaBtn.addEventListener('click', function() {
+        paymentModal.style.display = 'block';
+        paymentModal.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    });
+
+    confirmPaymentBtn.addEventListener('click', function() {
+        paymentModal.style.display = 'none';
+        alert('Payment successful! Redirecting...');
+        deliveryForm.submit();
+    });
+
+    closeModalBtn.addEventListener('click', function() {
+        paymentModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(e) {
+        if (e.target == paymentModal) {
+            paymentModal.style.display = 'none';
+        }
+    });
+});
+</script>
+
+{% endblock %}

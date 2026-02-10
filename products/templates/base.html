@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Faulora Farm{% endblock %}</title>
+
+    {% load static %}
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        /* Cart preview styling with creative enhancements */
+        nav .cart-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cart-dropdown .cart-preview {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+            color: #333;
+            min-width: 280px;
+            border: 2px solid #4caf50;
+            border-radius: 12px;
+            padding: 15px;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-dropdown:hover .cart-preview {
+            display: block;
+        }
+
+        .cart-preview div {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .cart-preview div:last-child {
+            border-bottom: none;
+        }
+
+        .cart-preview div:hover {
+            background: #e8f5e8;
+            border-radius: 6px;
+            padding-left: 5px;
+        }
+
+        .cart-preview strong {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .cart-preview .view-cart-link {
+            display: block;
+            margin-top: 12px;
+            text-align: center;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cart-preview .view-cart-link:hover {
+            background: linear-gradient(45deg, #66bb6a, #81c784);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header { flex-direction: column; align-items: flex-start; }
+            nav { margin-top: 15px; width: 100%; text-align: center; }
+            .cart-dropdown .cart-preview { right: auto; left: 0; min-width: 250px; }
+            /* Add more mobile-specific styles below */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Faulora Farm</h1>
+        <nav>
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
+            <a href="{% url 'products:product_list' %}"><i class="fas fa-leaf"></i> Products</a>
+            <a href="/about/"><i class="fas fa-info-circle"></i> About</a>
+
+            <!-- Cart icon with enhanced mini-preview -->
+            <div class="cart-dropdown">
+                <a href="{% url 'cart:cart_detail' %}">
+                    <i class="fa-solid fa-cart-shopping"></i> Cart
+                    {% if cart_total_qty %} ({{ cart_total_qty }}){% endif %}
+                </a>
+                <div class="cart-preview">
+                    {% if cart_items_summary %}
+                        {% for item in cart_items_summary %}
+                            <div>{{ item.product.name }} × {{ item.quantity }} - KSh {{ item.subtotal|floatformat:2 }}</div>
+                        {% endfor %}
+                        <strong>Total: KSh {{ cart_total_price|floatformat:2 }}</strong>
+                        <a href="{% url 'cart:cart_detail' %}" class="view-cart-link">View Full Cart 🛒</a>
+                    {% else %}
+                        <div>Your cart is empty. Start shopping! </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+                <span style="margin-left:15px; font-weight:bold; color: #fff;"><i class="fas fa-user"></i> Hi, {{ user.username }}</span>
+                <form id="logoutForm" method="post" action="{% url 'accounts:logout_view' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="margin-left:10px;" onclick="return confirmLogout();"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" style="margin-left:10px;"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="{% url 'accounts:register' %}" style="margin-left:10px;"><i class="fas fa-user-plus"></i> Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Faulora Farm. All rights reserved. Fresh from the farm to your table! <i class="fas fa-heart" style="color: #ff6b6b;"></i></p>
+    </footer>
+
+    <script>
+        function confirmLogout() {
+            return confirm("Are you sure you want to log out? ");
+        }
+    </script>
+</body>
+</html>

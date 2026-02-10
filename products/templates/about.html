@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}About Us - Faulora Farm{% endblock %}
+
+{% block content %}
+<!-- Add Font Awesome for icons (if not already in base.html) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Reuse and adapt farm aesthetic styles from checkout page */
+    body {
+        background: linear-gradient(135deg, #f0f8f0 0%, #e8f5e8 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #2e7d32;
+        margin: 0;
+        padding: 0;
+    }
+
+    .about-container {
+        max-width: 900px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(46, 125, 50, 0.15);
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .about-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%232e7d32" opacity="0.1"/></svg>');
+        background-size: 20px 20px;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .about-header {
+        text-align: center;
+        color: #1b5e20;
+        margin-bottom: 30px;
+        font-size: 2.2em;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1s ease-in;
+    }
+
+    .about-section {
+        background: linear-gradient(145deg, #ffffff, #f1f8e9);
+        border: 2px solid #c8e6c9;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .about-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .about-section h3 {
+        color: #1b5e20;
+        font-size: 1.4em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .about-section h3::before {
+        content: '\f4da'; /* Leaf icon from FA */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        color: white;
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn:hover {
+        background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+        .about-container {
+            margin: 20px;
+            padding: 20px;
+        }
+        .about-header {
+            font-size: 1.8em;
+        }
+    }
+</style>
+
+<div class="about-container">
+    <h2 class="about-header"> About Faulora Farm</h2>
+
+    <div class="about-section">
+        <h3>Our Story</h3>
+        <p>Faulora Farm was born from the dance of flora and fauna, where life blossoms in perfect harmony. From tiny seeds in rich Kenyan soil to lush fields of vibrant crops, our journey is one of nurturing nature and cultivating trust. Every leaf, fruit, and vegetable carries our promise: fresh, honest, and wholesome. Faulora is more than a farm—it’s a living story of growth, care, and connection.</p>
+    </div>
+
+    <div class="about-section">
+        <h3>Our Values</h3>
+        <ul>
+            <li><strong>Sustainability:</strong> We prioritize the environment with organic farming methods and minimal waste.</li>
+            <li><strong>Quality:</strong> Every product is hand-picked at peak ripeness for unbeatable taste.</li>
+            <li><strong>Community:</strong> Supporting local farmers and delivering directly to your door.</li>
+        </ul>
+    </div>
+
+    <div class="about-section">
+        <h3>What We Grow</h3>
+        <p>From sun-kissed fruits and crisp vegetables to wholesome dairy and fragrant herbs, Faulora cultivates a spectrum of nature’s finest. Every product is hand-tended, ripened naturally, and delivered with care. We don’t just grow food—we grow health, flavor, and joy, so every meal becomes a celebration of life straight from our fields. Check out our <a href="{% url 'products:product_list' %}" class="btn"><i class="fas fa-leaf"></i> Products</a> to see what's fresh today!</p>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'home' %}" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+    </div>
+</div>
+
+{% endblock %}

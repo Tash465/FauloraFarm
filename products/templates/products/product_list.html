@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shop Fresh Produce - Faulora Farm{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Shop fresh, organic produce from Faulora Farm. Browse fruits, vegetables, dairy, and more—locally grown in Kenya.">
+<meta name="keywords" content="fresh produce, organic fruits, vegetables, dairy, Kenyan farm, Faulora Farm">
+<meta property="og:title" content="Shop Fresh Produce - Faulora Farm">
+<meta property="og:description" content="Discover locally grown produce. Shop now!">
+<meta property="og:image" content="{% static 'images/farm-hero.jpg' %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/product_list.css' %}">
+
+<main id="main-content">
+    <!-- Hero Section -->
+    <section class="hero fade-in" role="banner" aria-labelledby="hero-title">
+        <h1 id="hero-title">Faulora Farm Shop</h1>
+        <p>Fresh, locally grown produce — straight from our lush fields to your table.</p>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Search & Filter -->
+    <section class="search-bar fade-in" aria-labelledby="filter-heading">
+        <form method="get" class="filter-bar">
+            <input type="text" name="search" placeholder="Search for fruits, vegetables, or dairy..."
+                   value="{{ search_query|default:'' }}" class="search-input" aria-label="Search products">
+            <select name="category" class="category-select" aria-label="Filter products by category">
+                <option value="">All Categories</option>
+                {% for key, value in categories.items %}
+                    <option value="{{ key }}" {% if selected_category == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="filter-btn" aria-label="Apply filters">
+                <i class="fas fa-filter" aria-hidden="true"></i> Filter
+            </button>
+        </form>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="product-grid-section fade-in" aria-labelledby="products-heading">
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="product-card hover-zoom" data-name="{{ product.name|lower }}">
+                    <a href="{% url 'products:product_detail' product.pk %}" aria-label="View details for {{ product.name }}">
+                        {% if product.image %}
+                            <img src="{{ product.image }}" alt="Image of {{ product.name }}" class="product-image" loading="lazy">
+                        {% else %}
+                            <div class="product-image no-img-box">
+                                <i class="fas fa-leaf" aria-hidden="true"></i>
+                                <span>No Image</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <div class="product-details">
+                        <h3>{{ product.name }}</h3>
+                        <p class="product-price">KSh {{ product.price }} / {{ product.unit }}</p>
+                        <form action="{% url 'products:add_to_cart' product.pk %}" method="post" class="add-to-cart-form">
+                            {% csrf_token %}
+                            <button type="submit" class="add-to-cart-btn" aria-label="Add {{ product.name }} to cart">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="no-products">
+                    <i class="fas fa-search"></i>
+                    <p>No products found. Try adjusting your search or filters.</p>
+                    <a href="{% url 'products:product_list' %}" class="btn">Browse All</a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    {% if products.has_other_pages %}
+    <section class="pagination fade-in" aria-labelledby="pagination-heading">
+        <div class="pagination-controls">
+            {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-btn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
+            {% endif %}
+            <span class="pagination-info">Page {{ products.number }} of {{ products.paginator.num_pages }}</span>
+            {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-btn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+</main>
+
+<!-- JS for AJAX Add to Cart & Search -->
+<script src="{% static 'js/product_list.js' %}"></script>
+{% endblock %}

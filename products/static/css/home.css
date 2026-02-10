@@ -1,0 +1,475 @@
+/* === Global Styles: Clean, Alluring Base === */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f3fff3 0%, #ffffff 100%);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: #4caf50;
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 1000;
+    border-radius: 4px;
+    transition: top 0.3s ease;
+}
+.skip-link:focus {
+    top: 6px;
+}
+
+/* === Animations: Subtle, Alluring Movements === */
+.fade-in {
+    animation: fadeIn 1.2s ease-in;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hover-zoom {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-zoom:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+}
+
+/* === Buttons: Enticing, Gradient-Powered === */
+.btn {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+.btn:hover {
+    background: linear-gradient(135deg, #2e7d32, #1b5e20);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+.btn:focus {
+    outline: 2px solid #4caf50;
+    outline-offset: 2px;
+}
+.hero-btn {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3); }
+    50% { box-shadow: 0 8px 16px rgba(76, 175, 80, 0.5); }
+    100% { box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3); }
+}
+
+/* === Hero Section: Breathtaking, Sunset-Inspired === */
+.hero {
+    position: relative;
+    text-align: center;
+    padding: 120px 20px;
+    color: #fff;
+    border-bottom: 5px solid #4caf50;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b, #4caf50); /* Sunset to green gradient */
+    background-image: url('../images/farm-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+}
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20 20 Q50 10 80 20 Q90 50 80 80 Q50 90 20 80 Q10 50 20 20" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></svg>');
+    background-size: 100px 100px;
+    pointer-events: none;
+    z-index: 1;
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.hero h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1.5s ease-out;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hero p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.guarantee {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-top: 20px;
+    opacity: 0.9;
+}
+
+/* Floating Leaves Animation */
+.leaf {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="%23ffffff" opacity="0.7"/></svg>') no-repeat center;
+    background-size: contain;
+    animation: float 6s ease-in-out infinite;
+    z-index: 1;
+}
+.leaf-1 { top: 20%; left: 10%; animation-delay: 0s; }
+.leaf-2 { top: 40%; right: 15%; animation-delay: 2s; }
+.leaf-3 { top: 60%; left: 20%; animation-delay: 4s; }
+.leaf-4 { top: 80%; right: 10%; animation-delay: 1s; }
+.leaf-5 { top: 30%; left: 80%; animation-delay: 3s; }
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+/* === Section Dividers: Elegant Separators === */
+.section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #4caf50, transparent);
+    margin: 60px 0;
+}
+
+/* === Sections: Consistent, Organic Layout === */
+.section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.section-container {
+    text-align: center;
+}
+.section h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    color: #2e7d32;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+.section h2 i {
+    margin-right: 10px;
+    color: #4caf50;
+}
+
+/* === Grid Layouts: Flexible and Responsive === */
+.grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Benefit Cards */
+.benefit-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+    padding: 30px 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+.benefit-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.benefit-card i {
+    font-size: 3em;
+    color: #4caf50;
+    margin-bottom: 15px;
+}
+.benefit-card h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #2e7d32;
+}
+.benefit-card p {
+    font-size: 1em;
+    color: #555;
+}
+
+/* Category Buttons */
+.category-btn {
+    background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+    color: #2e7d32;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+.category-btn:hover {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+.category-btn i {
+    display: block;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+/* Product Cards */
+.product-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.product-card:hover img {
+    transform: scale(1.1);
+}
+.product-card h3 {
+    font-size: 1.3em;
+    margin: 15px 0 10px;
+    color: #2e7d32;
+    text-align: center;
+}
+.product-card p {
+    padding: 0 15px;
+    text-align: center;
+    color: #666;
+}
+.product-card strong {
+    font-size: 1.2em;
+    color: #4caf50;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.product-card form {
+    padding: 0 15px 15px;
+    text-align: center;
+}
+
+/* Stat Cards */
+.stat-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+.stat-card h3 {
+    font-size: 2.5em;
+    color: #4caf50;
+    margin-bottom: 10px;
+}
+.stat-card p {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Testimonials */
+.testimonials {
+    background: linear-gradient(180deg, #f9f9f9 0%, #e8f5e8 100%);
+    padding: 60px 20px;
+}
+.testimonial-carousel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+.testimonial {
+    display: none;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-style: italic;
+}
+.testimonial.active {
+    display: block;
+    animation: slideIn 0.5s ease;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(50px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.testimonial p {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: #333;
+}
+.testimonial cite {
+    font-weight: bold;
+    color: #4caf50;
+}
+.carousel-controls {
+    margin-top: 20px;
+}
+.carousel-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background 0.3s ease;
+}
+.carousel-btn:hover {
+    background: #2e7d32;
+}
+
+/* Newsletter */
+.newsletter {
+    background: linear-gradient(135deg, #2e7d32, #4caf50);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+.newsletter h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+.newsletter p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+.newsletter form {
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.newsletter input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 25px;
+    border: none;
+    font-size: 1em;
+}
+.newsletter .btn {
+    background: white;
+    color: #4caf50;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+}
+.newsletter .btn:hover {
+    background: #f1f8e9;
+}
+.socials {
+    margin-top: 30px;
+    font-size: 1.1em;
+}
+.socials a {
+    margin: 0 10px;
+    color: white;
+    font-size: 1.5em;
+    transition: color 0.3s ease;
+}
+.socials a:hover {
+    color: #feb47b;
+}
+
+/* Back to Top Button */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    z-index: 1000;
+    padding: 15px;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.back-to-top:hover {
+    transform: scale(1.1);
+}
+
+/* === Responsive Design: Mobile-First Approach === */
+@media (max-width: 768px) {
+    .hero {
+        padding: 80px 20px;
+    }
+    .hero h1 {
+        font-size: 2.5em;
+    }
+    .hero p {
+        font-size: 1.1em;
+    }
+    .section {
+        padding: 40px 20px;
+    }
+    .section h2 {
+        font-size: 2em;
+    }
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .benefit-card, .stat-card {
+        padding: 20px;
+    }
+    .category-btn {
+        padding: 15px;
+    }
+    .product-card img {
+        height: 150px;
+    }
+    .testimonial-carousel {
+        max-width: 100%;
+    }
+    .newsletter form {
+        flex-direction: column;
+        align-items: center;
+    }
+    .newsletter input {
+        width: 100%;
+        max-width: 300px;
+    }
+    .socials a {
+        margin: 5px;
+    }
+}

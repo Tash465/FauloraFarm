@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Login - Faulora Farm{% endblock %}
+
+{% block content %}
+<style>
+.login-container {
+    max-width: 420px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.login-container h2 {
+    color: #2e7d32;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.login-container form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.login-container form input:focus {
+    border-color: #2e7d32;
+    outline: none;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2e7d32;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-btn:hover {
+    background: #1b5e20;
+}
+
+.small-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.small-text a {
+    color: #2e7d32;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.error-msg {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+</style>
+
+<div class="login-container">
+    <h2>Login</h2>
+
+    {% if form.errors %}
+        <div class="error-msg">
+            Invalid username or password.
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'accounts:login' %}?next={{ request.GET.next }}">
+        {% csrf_token %}
+        <input id="id_username" type="text" name="username" placeholder="Enter Username" value="{{ form.username.value|default:'' }}" required>
+        <input id="id_password" type="password" name="password" placeholder="Enter Password" required>
+        <button type="submit" class="login-btn">Login</button>
+    </form>
+
+    <p class="small-text">Don't have an account? <a href="{% url 'accounts:register' %}">Register</a></p>
+</div>
+{% endblock %}

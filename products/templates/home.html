@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome to Faulora Farm - Fresh, Local Produce from Kenya{% endblock %}
+
+{% block meta %}
+<meta name="description" content="Discover Faulora Farm: Kenya's freshest organic produce, hand-picked from sustainable fields. Shop fruits, vegetables, and more—farm to table!">
+<meta name="keywords" content="Kenyan produce, organic farm, fresh fruits, vegetables, sustainable farming, Faulora Farm">
+<meta property="og:title" content="Welcome to Faulora Farm">
+<meta property="og:description" content="Fresh, local produce from Kenya's lush fields. Shop now!">
+<meta property="og:image" content="{% static 'images/farm-hero.jpg' %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Faulora Farm",
+  "url": "{{ request.build_absolute_uri }}",
+  "logo": "{% static 'images/logo.png' %}",
+  "description": "Kenya's premier organic farm offering fresh produce.",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+254-791-803-817",
+    "contactType": "Customer Service"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<main id="main-content">
+
+    <!-- Hero Section -->
+    <section class="hero" role="banner" aria-labelledby="hero-title">
+        <div class="hero-content">
+            <h1 id="hero-title">Faulora Farm</h1>
+            <p>Discover Kenya's freshest produce, hand-picked from our lush, sustainable fields under the Kenyan sun.</p>
+            <a href="{% url 'products:product_list' %}" class="btn hero-btn" aria-label="Shop our fresh products">Shop Now</a>
+            <p class="guarantee">100% Fresh • Locally Grown • Farm to Table</p>
+        </div>
+        <div class="leaf leaf-1" aria-hidden="true"></div>
+        <div class="leaf leaf-2" aria-hidden="true"></div>
+        <div class="leaf leaf-3" aria-hidden="true"></div>
+        <div class="leaf leaf-4" aria-hidden="true"></div>
+        <div class="leaf leaf-5" aria-hidden="true"></div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Why Choose Us -->
+    <section class="section why-choose-us fade-in" aria-labelledby="why-heading">
+        <div class="section-container">
+            <h2 id="why-heading"><i class="fas fa-heart" aria-hidden="true"></i> Why Choose Faulora Farm?</h2>
+            <div class="grid">
+                <div class="benefit-card">
+                    <i class="fas fa-leaf" aria-hidden="true"></i>
+                    <h3>Organic & Sustainable</h3>
+                    <p>Grown without chemicals, nurturing the earth for future generations.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-truck" aria-hidden="true"></i>
+                    <h3>Fresh Delivery</h3>
+                    <p>Harvested daily and delivered straight to your door.</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-users" aria-hidden="true"></i>
+                    <h3>Community Focused</h3>
+                    <p>Supporting local farmers and wholesome living.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Categories -->
+<section class="section categories fade-in" aria-labelledby="categories-heading">
+    <h2 id="categories-heading"><i class="fas fa-seedling" aria-hidden="true"></i> Explore Our Bounty</h2>
+    <div class="grid">
+        <a href="{% url 'products:product_list' %}?category=field_crops" class="category-btn" aria-label="Browse field crops">
+            <i class="fas fa-wheat-awn" aria-hidden="true"></i> Field Crops
+        </a>
+        <a href="{% url 'products:product_list' %}?category=vegetables" class="category-btn" aria-label="Browse vegetables">
+            <i class="fas fa-carrot" aria-hidden="true"></i> Vegetables
+        </a>
+        <a href="{% url 'products:product_list' %}?category=fruits" class="category-btn" aria-label="Browse fruits">
+            <i class="fas fa-apple-alt" aria-hidden="true"></i> Fruits
+        </a>
+        <a href="{% url 'products:product_list' %}?category=herbs_spices" class="category-btn" aria-label="Browse herbs and spices">
+            <i class="fas fa-leaf" aria-hidden="true"></i> Herbs & Spices
+        </a>
+        <a href="{% url 'products:product_list' %}?category=dairy" class="category-btn" aria-label="Browse dairy products">
+            <i class="fas fa-cheese" aria-hidden="true"></i> Dairy
+        </a>
+        <a href="{% url 'products:product_list' %}?category=eggs" class="category-btn" aria-label="Browse eggs">
+            <i class="fas fa-egg" aria-hidden="true"></i> Eggs
+        </a>
+        <a href="{% url 'products:product_list' %}?category=meat" class="category-btn" aria-label="Browse meat">
+            <i class="fas fa-drumstick-bite" aria-hidden="true"></i> Meat
+        </a>
+    </div>
+</section>
+
+
+    <!-- Featured Products -->
+    <section class="section spotlight fade-in" aria-labelledby="featured-heading">
+        <h2 id="featured-heading"><i class="fas fa-sun" aria-hidden="true"></i> Featured Products</h2>
+        <div class="grid">
+            {% for product in featured_products %}
+                <div class="product-card hover-zoom">
+                    <a href="{% url 'products:product_detail' product.pk %}" aria-label="View details for {{ product.name }}">
+                        {% if product.image %}
+                            <img src="{{ product.image }}" alt="Image of {{ product.name }}" loading="lazy">
+                        {% else %}
+                            <img src="{% static 'images/placeholder-product.jpg' %}" alt="Placeholder image for {{ product.name }}" loading="lazy">
+                        {% endif %}
+                        <h3>{{ product.name }}</h3>
+                    </a>
+                    <p>{{ product.description|truncatewords:12 }}</p>
+                    <p><strong>KSh {{ product.price }}</strong></p>
+                    <form method="post" action="{% url 'products:add_to_cart' product.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" aria-label="Add {{ product.name }} to cart">Order Now</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No featured products at the moment. <a href="{% url 'products:product_list' %}" class="btn">Browse All Products</a></p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Impact Stats -->
+    <section class="section stats fade-in" aria-labelledby="stats-heading">
+        <div class="section-container">
+            <h2 id="stats-heading"><i class="fas fa-chart-line" aria-hidden="true"></i> Our Impact</h2>
+            <div class="grid">
+                <div class="stat-card">
+                    <h3>500+</h3>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-card">
+                    <h3>50+</h3>
+                    <p>Varieties of Produce</p>
+                </div>
+                <div class="stat-card">
+                    <h3>10+</h3>
+                    <p>Years of Farming</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Testimonials -->
+<section class="section testimonials fade-in" aria-labelledby="testimonials-heading">
+    <div class="section-container">
+        <h2 id="testimonials-heading"><i class="fas fa-quote-left" aria-hidden="true"></i> What Our Customers Say</h2>
+        <div class="testimonial-carousel" aria-live="polite">
+            <div class="testimonial active">
+                <p>"Faulora Farm delivers the freshest vegetables right to my doorstep. Quality and service are unmatched!"</p>
+                <cite>- Mary W., Nairobi County</cite>
+            </div>
+            <div class="testimonial">
+                <p>"I love the organic fruits from Faulora Farm. My family enjoys healthy and tasty meals every day."</p>
+                <cite>- John K., Kiambu County</cite>
+            </div>
+            <div class="testimonial">
+                <p>"The delivery is always on time and the produce is top-notch. Highly recommended!"</p>
+                <cite>- Amina M., Mombasa County</cite>
+            </div>
+            <div class="testimonial">
+                <p>"Great variety of farm products. I especially enjoy the dairy section. Excellent service!"</p>
+                <cite>- Peter O., Nakuru County</cite>
+            </div>
+            <div class="testimonial">
+                <p>"Affordable prices and fresh products. Shopping at Faulora Farm is a delight."</p>
+                <cite>- Grace N., Kisumu County</cite>
+            </div>
+        </div>
+        <div class="carousel-controls">
+            <button class="carousel-btn prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-btn next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+
+    <!-- Newsletter -->
+    <section class="newsletter fade-in" aria-labelledby="newsletter-heading">
+        <h2 id="newsletter-heading"><i class="fas fa-envelope" aria-hidden="true"></i> Join Our Farm Fresh Community</h2>
+        <p>Get weekly tips, exclusive deals, and harvest updates straight to your inbox.</p>
+        <form action="{% url 'products:newsletter_signup' %}" method="post" novalidate>
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Your Email" required 
+                   aria-label="Enter your email for newsletter" 
+                   pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" 
+                   title="Please enter a valid email address">
+            <button type="submit" class="btn" aria-label="Subscribe to newsletter">Subscribe</button>
+        </form>
+        <p class="socials">
+            Follow us:
+            <a href="https://t.me/faulorafarm" target="_blank" rel="noopener" aria-label="Follow us on Telegram"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://facebook.com/faulorafarm" target="_blank" rel="noopener" aria-label="Follow us on Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com/faulorafarm" target="_blank" rel="noopener" aria-label="Follow us on Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://x.com/faulorafarm" target="_blank" rel="noopener" aria-label="Follow us on X"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://wa.me/0791803817" target="_blank" rel="noopener" aria-label="Contact us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </p>
+    </section>
+
+</main>
+
+<button id="back-to-top" class="btn back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<script>
+    // Back to Top
+    const backToTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        backToTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Testimonials Carousel
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+
+    function showTestimonial(index) {
+        testimonials.forEach((t, i) => t.classList.toggle('active', i === index));
+    }
+
+    prevBtn.addEventListener('click', () => {
+        currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+        showTestimonial(currentTestimonial);
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+        showTestimonial(currentTestimonial);
+    });
+
+    setInterval(() => {
+        currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+        showTestimonial(currentTestimonial);
+    }, 5000);
+</script>
+
+{% endblock %}

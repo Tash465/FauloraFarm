@@ -1,0 +1,9 @@
+﻿Django==5.2.7
+whitenoise==6.11.0
+gunicorn==21.2.0
+pillow==11.3.0
+cloudinary==1.44.1
+django-cloudinary-storage==0.3.0
+python-dotenv==1.2.1
+
+
