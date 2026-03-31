@@ -247,7 +247,7 @@ body {
                             <td>KSh {{ item.product.price }}</td>
                             <td>KSh {{ item.subtotal|floatformat:2 }}</td>
                             <td>
-                                <a href="{% url 'cart:remove_from_cart' item.product.pk %}" class="remove-btn">
+                                <a href="{% url 'cart:remove_from_cart' item.product.pk %}" class="remove-btn" title="Remove {{ item.product.name }} from cart">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>

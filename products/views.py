@@ -6,7 +6,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 
 from .models import Product
-from cart.models import Order, OrderItem  # Adjust if these are in another app
+from cart.models import Order, OrderItem  
 
 # ---------------- ABOUT ----------------
 def about(request):
@@ -236,5 +236,4 @@ def newsletter_signup(request):
     email = request.POST.get('email')
     if email:
         print(f"New newsletter signup: {email}")
-        # Optional: Save to a model here
     return redirect('/')

@@ -1,12 +1,12 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv  
+from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 
 # --------------------------------------------------
 # LOAD ENVIRONMENT VARIABLES
 # --------------------------------------------------
-load_dotenv()  
+load_dotenv()
 
 # --------------------------------------------------
 # BASE SETTINGS
@@ -17,13 +17,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY & DEBUG
 # --------------------------------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret')
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = [
-    'faulora-farm.onrender.com',  
-    'localhost',
-    '127.0.0.1'
-]
+# Force local development mode
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 # --------------------------------------------------
 # APPLICATIONS
@@ -43,7 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'orders',
 
-    # Third-party
+    # Third-party apps
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -53,7 +51,6 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,7 +66,7 @@ ROOT_URLCONF = 'faulora_farm.urls'
 WSGI_APPLICATION = 'faulora_farm.wsgi.application'
 
 # --------------------------------------------------
-# DATABASE
+# DATABASE (LOCAL SQLITE)
 # --------------------------------------------------
 DATABASES = {
     'default': {
@@ -97,15 +94,13 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC FILES
+# STATIC FILES (LOCAL ONLY)
 # --------------------------------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'products' / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --------------------------------------------------
-#  CLOUDINARY MEDIA CONFIGURATION
+# CLOUDINARY CONFIGURATION
 # --------------------------------------------------
 import cloudinary
 import cloudinary.uploader
@@ -124,10 +119,6 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Remove local media folders completely
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
 
 # --------------------------------------------------
 # TEMPLATES
@@ -162,6 +153,8 @@ LOGOUT_REDIRECT_URL = '/'
 MESSAGE_TAGS = {messages.ERROR: 'danger'}
 
 # --------------------------------------------------
-# SECURITY HEADERS
+# SECURITY (LOCAL SAFE)
 # --------------------------------------------------
-CSRF_TRUSTED_ORIGINS = ['https://faulora_farm.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+]
