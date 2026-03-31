@@ -2,11 +2,14 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # --------------------------------------------------
 # LOAD ENVIRONMENT VARIABLES
 # --------------------------------------------------
-load_dotenv()
+load_dotenv()  # loads .env for local dev
 
 # --------------------------------------------------
 # BASE SETTINGS
@@ -17,17 +20,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY & DEBUG
 # --------------------------------------------------
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret')
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-# Force local development mode
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'faulora_farm.onrender.com',  # Render domain
+]
 
 # --------------------------------------------------
 # APPLICATIONS
 # --------------------------------------------------
 INSTALLED_APPS = [
-    # Django core apps
+    # Django core
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'orders',
 
-    # Third-party apps
+    # Third-party
     'cloudinary',
     'cloudinary_storage',
 ]
@@ -51,6 +56,7 @@ INSTALLED_APPS = [
 # --------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files on Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,12 +72,12 @@ ROOT_URLCONF = 'faulora_farm.urls'
 WSGI_APPLICATION = 'faulora_farm.wsgi.application'
 
 # --------------------------------------------------
-# DATABASE (LOCAL SQLITE)
+# DATABASE CONFIGURATION
 # --------------------------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3', 
     }
 }
 
@@ -94,18 +100,16 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------------------------------------
-# STATIC FILES (LOCAL ONLY)
+# STATIC FILES
 # --------------------------------------------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'products' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # --------------------------------------------------
-# CLOUDINARY CONFIGURATION
+# CLOUDINARY MEDIA
 # --------------------------------------------------
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 cloudinary.config(
     cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
     api_key=os.environ.get('CLOUDINARY_API_KEY'),
@@ -146,15 +150,16 @@ TEMPLATES = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --------------------------------------------------
-# AUTHENTICATION & MESSAGES
+# AUTH & MESSAGES
 # --------------------------------------------------
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 MESSAGE_TAGS = {messages.ERROR: 'danger'}
 
 # --------------------------------------------------
-# SECURITY (LOCAL SAFE)
+# CSRF TRUSTED ORIGINS
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000',
+    'http://127.0.0.1:8000',          # Local
+    'https://faulora_farm.onrender.com',  # Render
 ]
