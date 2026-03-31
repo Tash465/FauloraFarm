@@ -17,11 +17,11 @@ def about(request):
 
 def create_admin(request):
     """Temporary view to create admin user"""
-    if not User.objects.filter(username='T490s9').exists():
+    if not User.objects.filter(username='admin').exists():
         User.objects.create_superuser(
-            username='T490s9',
-            email='talianyaga6@email.com',
-            password='2912@Ikingi'
+            username='admin',
+            email='admin@email.com',
+            password='admin123'
         )
         return HttpResponse("Admin created successfully")
     return HttpResponse("Admin already exists")
