@@ -25,7 +25,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'faulora_farm.onrender.com',  # Render domain
+    'faulorafarm.onrender.com',  # Render domain
 ]
 
 # --------------------------------------------------
@@ -161,5 +161,5 @@ MESSAGE_TAGS = {messages.ERROR: 'danger'}
 # --------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',          # Local
-    'https://faulora_farm.onrender.com',  # Render
+    'https://faulorafarm.onrender.com',  # Render
 ]
