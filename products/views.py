@@ -4,8 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.http import HttpResponse
 
 from .models import Product
 from cart.models import Order, OrderItem  
@@ -15,16 +13,6 @@ def about(request):
     """Display the About Us page."""
     return render(request, 'about.html')
 
-def create_admin(request):
-    """Temporary view to create admin user"""
-    if not User.objects.filter(username='admin').exists():
-        User.objects.create_superuser(
-            username='admin',
-            email='admin@email.com',
-            password='admin123'
-        )
-        return HttpResponse("Admin created successfully")
-    return HttpResponse("Admin already exists")
 
 # ---------------- HOME / FEATURED ----------------
 def home(request):
